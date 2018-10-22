@@ -84,26 +84,53 @@
 // });
 
 //JUGGLING ASYNC
-var http = require('http');
-var bl = require('bl');
-var results = [];
-var urls = process.argv.slice(2);
-var count = urls.length;
+// var http = require('http');
+// var bl = require('bl');
+// var results = [];
+// var urls = process.argv.slice(2);
+// var count = urls.length;
 
-urls.forEach((url, index) => {
-  http.get(url, res => {
-    res.pipe(
-      bl((err, data) => {
-        if (err) throw Error;
-        results[index] = data.toString();
-        count--;
+// urls.forEach((url, index) => {
+//   http.get(url, res => {
+//     res.pipe(
+//       bl((err, data) => {
+//         if (err) throw Error;
+//         results[index] = data.toString();
+//         count--;
 
-        if (count === 0) {
-          results.forEach(result => {
-            console.log(result);
-          });
-        }
-      })
+//         if (count === 0) {
+//           results.forEach(result => {
+//             console.log(result);
+//           });
+//         }
+//       })
+//     );
+//   });
+// });
+
+//TIME SERVER
+var net = require('net');
+
+function zeroFill(i) {
+  return (i < 10 ? '0' : '') + i;
+}
+net
+  .createServer(socket => {
+    socket.end(
+      (() => {
+        var date = new Date();
+        return (
+          date.getFullYear() +
+          '-' +
+          zeroFill(date.getMonth() + 1) +
+          '-' +
+          zeroFill(date.getDate()) +
+          ' ' +
+          zeroFill(date.getHours()) +
+          ':' +
+          zeroFill(date.getMinutes())
+        );
+      })() + '\n'
     );
-  });
-});
+  })
+  .listen(Number(process.argv[2]));
