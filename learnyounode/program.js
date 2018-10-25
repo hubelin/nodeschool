@@ -109,28 +109,101 @@
 // });
 
 //TIME SERVER
-var net = require('net');
+// var net = require('net');
 
-function zeroFill(i) {
-  return (i < 10 ? '0' : '') + i;
-}
-net
-  .createServer(socket => {
-    socket.end(
-      (() => {
-        var date = new Date();
-        return (
-          date.getFullYear() +
-          '-' +
-          zeroFill(date.getMonth() + 1) +
-          '-' +
-          zeroFill(date.getDate()) +
-          ' ' +
-          zeroFill(date.getHours()) +
-          ':' +
-          zeroFill(date.getMinutes())
-        );
-      })() + '\n'
-    );
+// function zeroFill(i) {
+//   return (i < 10 ? '0' : '') + i;
+// }
+// net
+//   .createServer(socket => {
+//     socket.end(
+//       (() => {
+//         var date = new Date();
+//         return (
+//           date.getFullYear() +
+//           '-' +
+//           zeroFill(date.getMonth() + 1) +
+//           '-' +
+//           zeroFill(date.getDate()) +
+//           ' ' +
+//           zeroFill(date.getHours()) +
+//           ':' +
+//           zeroFill(date.getMinutes())
+//         );
+//       })() + '\n'
+//     );
+//   })
+//   .listen(Number(process.argv[2]));
+
+//HTTP FILE SERVER
+// var http = require('http');
+// var fs = require('fs');
+// var port = Number(process.argv[2]);
+// var file = process.argv[3];
+
+// http
+//   .createServer((req, res) => {
+//     fs.createReadStream(file).pipe(res);
+//   })
+//   .listen(port);
+
+//HTTP UPPERCASERER
+// var http = require('http');
+// var map = require('through2-map');
+
+// var port = Number(process.argv[2]);
+
+// http
+//   .createServer((req, res) => {
+//     if (req.method !== 'POST') {
+//       return res.end('send me a POST\n');
+//     }
+//     req
+//       .pipe(
+//         map(chunk => {
+//           return chunk.toString().toUpperCase();
+//         })
+//       )
+//       .pipe(res);
+//   })
+//   .listen(port);
+
+var http = require('http');
+var url = require('url');
+
+var parseTime = time => {
+  return {
+    hour: time.getHours(),
+    minute: time.getMinutes(),
+    second: time.getSeconds()
+  };
+};
+
+var unixTime = time => {
+  return { unixtime: time.getTime() };
+};
+
+var parseQuery = url => {
+  switch (url.pathname) {
+    case '/api/parsetime':
+      return parseTime(new Date(url.query.iso));
+    case '/api/unixtime':
+      return unixTime(new Date(url.query.iso));
+    default:
+      return 'Enter valid endpoint url';
+  }
+};
+http
+  .createServer(function(request, response) {
+    // assign request.url to variable url
+    if (request.method === 'GET') {
+      response.writeHead(200, { 'Content-Type': 'application/json' });
+      url = url.parse(request.url, true);
+      // log contents of url to console
+      response.end(JSON.stringify(parseQuery(url)));
+    } else {
+      response.writeHead(405);
+      response.end();
+    }
   })
-  .listen(Number(process.argv[2]));
+  .listen(+process.argv[2]);
