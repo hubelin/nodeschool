@@ -17,15 +17,31 @@
 // app.listen(port);
 
 //PUG
+// var express = require('express');
+// var app = express();
+// var path = require('path');
+
+// app.set('views', process.argv[3]);
+// app.set('view engine', 'pug');
+
+// app.get('/home', (req, res) => {
+//   res.render('index', { date: new Date().toDateString() });
+// });
+
+// app.listen(process.argv[2]);
+
+//GOOD OLD FORM
 var express = require('express');
 var app = express();
-var path = require('path');
+var bodyparser = require('body-parser');
 
-app.set('views', process.argv[3]);
-app.set('view engine', 'pug');
+app.use(bodyparser.urlencoded({ extended: false }));
 
-app.get('/home', (req, res) => {
-  res.render('index', { date: new Date().toDateString() });
+app.post('/form', (req, res) => {
+  result = req.body.str
+    .split('')
+    .reverse()
+    .join('');
+  res.end(result);
 });
-
 app.listen(process.argv[2]);
