@@ -34,3 +34,21 @@
 // var ws = require('websocket-stream');
 // var stream = ws('ws://localhost:8099');
 // stream.end('hello\n');
+
+var trumpet = require('trumpet');
+var through = require('through2');
+var tr = trumpet();
+
+var loud = tr.select('.loud').createStream();
+
+//ARROW FUNCTION NOT ALLOWED INSIDE THROUGH
+loud
+  .pipe(
+    through(function(buf, _, next) {
+      this.push(buf.toString().toUpperCase());
+      next();
+    })
+  )
+  .pipe(loud);
+
+process.stdin.pipe(tr).pipe(process.stdout);
