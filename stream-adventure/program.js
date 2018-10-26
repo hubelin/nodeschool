@@ -24,8 +24,13 @@
 
 //HTTP CLIENT
 // var http = require('http');
-var request = require('request');
+// var request = require('request');
 
-let url = 'http://localhost:8099';
-let r = request.post(url);
-process.stdin.pipe(r).pipe(process.stdout);
+// let url = 'http://localhost:8099';
+// let r = request.post(url);
+// process.stdin.pipe(r).pipe(process.stdout);
+
+//WEBSOCKETS
+// var ws = require('websocket-stream');
+// var stream = ws('ws://localhost:8099');
+// stream.end('hello\n');
