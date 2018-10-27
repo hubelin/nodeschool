@@ -73,11 +73,32 @@
 // app.listen(process.argv[2]);
 
 //WHAT'S IN QUERY
+// var express = require('express');
+// var app = express();
+
+// app.get('/search', (req, res) => {
+//   res.send(req.query);
+// });
+
+// app.listen(process.argv[2]);
+
+//JSON ME
 var express = require('express');
 var app = express();
+var fs = require('fs');
+var file = process.argv[3];
+var port = process.argv[2];
 
-app.get('/search', (req, res) => {
-  res.send(req.query);
+app.get('/books', (req, res) => {
+  fs.readFile(file, (err, data) => {
+    if (err) res.sendStatus(500);
+    try {
+      books = JSON.parse(data);
+    } catch (err) {
+      res.sendStatus(500);
+    }
+    res.json(books);
+  });
 });
 
-app.listen(process.argv[2]);
+app.listen(port);
