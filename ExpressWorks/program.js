@@ -47,12 +47,27 @@
 // app.listen(process.argv[2]);
 
 //STYLISH CSS
+// var express = require('express');
+// var app = express();
+// app.use(
+//   require('stylus').middleware(
+//     process.argv[3] || path.join(__dirname, 'public')
+//   )
+// );
+// app.use(express.static(process.argv[3] || path.join(__dirname, 'public')));
+// app.listen(process.argv[2]);
+
+//PARAM PAM PAM
 var express = require('express');
 var app = express();
-app.use(
-  require('stylus').middleware(
-    process.argv[3] || path.join(__dirname, 'public')
-  )
-);
-app.use(express.static(process.argv[3] || path.join(__dirname, 'public')));
+
+app.put('/message/:ID', (req, res) => {
+  res.send(
+    require('crypto')
+      .createHash('sha1')
+      .update(new Date().toDateString() + req.params.ID)
+      .digest('hex')
+  );
+});
+
 app.listen(process.argv[2]);
