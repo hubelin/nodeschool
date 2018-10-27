@@ -58,16 +58,26 @@
 // app.listen(process.argv[2]);
 
 //PARAM PAM PAM
+// var express = require('express');
+// var app = express();
+
+// app.put('/message/:ID', (req, res) => {
+//   res.send(
+//     require('crypto')
+//       .createHash('sha1')
+//       .update(new Date().toDateString() + req.params.ID)
+//       .digest('hex')
+//   );
+// });
+
+// app.listen(process.argv[2]);
+
+//WHAT'S IN QUERY
 var express = require('express');
 var app = express();
 
-app.put('/message/:ID', (req, res) => {
-  res.send(
-    require('crypto')
-      .createHash('sha1')
-      .update(new Date().toDateString() + req.params.ID)
-      .digest('hex')
-  );
+app.get('/search', (req, res) => {
+  res.send(req.query);
 });
 
 app.listen(process.argv[2]);
