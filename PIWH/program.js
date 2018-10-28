@@ -16,17 +16,32 @@
 // });
 
 // Reject a Promise
-('use strict');
+// ('use strict');
+// require('es6-promise');
+
+// var promise = new Promise((fulfill, reject) => {
+//   setTimeout(() => {
+//     reject(new Error('REJECTED!'));
+//   }, 300);
+// });
+
+// var onReject = error => {
+//   console.log(error.message);
+// };
+
+// promise.then(null, onReject);
+
+// TO REJECT OR NOT REJECT
+'use strict';
 require('es6-promise');
 
 var promise = new Promise((fulfill, reject) => {
-  setTimeout(() => {
-    reject(new Error('REJECTED!'));
-  }, 300);
+  fulfill('I FIRED');
+  reject(new Error('I DID NOT FIRE'));
 });
 
-var onReject = error => {
-  console.log(error.message);
+var onRejected = err => {
+  console.log(err.message);
 };
 
-promise.then(null, onReject);
+promise.then(console.log, onRejected);
