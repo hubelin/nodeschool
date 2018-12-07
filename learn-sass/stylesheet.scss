@@ -1,0 +1,23 @@
+// $color: #000;
+// @import './variables';
+
+// body {
+//   color: $color;
+// }
+
+// aside {
+//   ul {
+//     margin: 0;
+//   }
+//   a {
+//     color: red;
+//   }
+// }
+
+@mixin border($thickness) {
+  border-width: $thickness;
+}
+
+img {
+  @include border(10px);
+}
